@@ -7,6 +7,7 @@ from xml.dom import minidom
 import sys
 import youtrack
 from xml.dom import Node
+import requests
 import urllib
 import urllib.parse
 import urllib.request
@@ -60,11 +61,13 @@ class Connection(object):
 
         self.url = url
         self.base_url = url + "/rest"
+        self.hub_url = url + "/hub/api/rest"
         if api_key is None:
-            self._credentials = (login, password)
-            self._login(*self._credentials)
+            print("NOT ENABLED YET: Please use api_key")
+            # self._credentials = (login, password)
+            # self._login(*self._credentials)
         else:
-            self.headers = {'X-YouTrack-ApiKey': api_key}
+            self.headers = {'Authorization': 'Bearer ' + api_key}
 
     def _login(self, login, password):
         response, content = self.http.request(
@@ -99,6 +102,31 @@ class Connection(object):
         _illegal_xml_chars_re = re.compile('[%s]' % ''.join(_illegal_ranges))
         content = re.sub(_illegal_xml_chars_re, '', content.decode('utf-8')).encode('utf-8')
         if response.status != 200 and response.status != 201 and (ignore_status != response.status):
+            raise youtrack.YouTrackException(url, response, content)
+
+        return response, content
+
+    def _reqs(self, method, url, params="", data="", content_type=None, accept_header=None):
+        headers = self.headers
+        headers = headers.copy()
+        if method == 'PUT' or method == 'POST':
+            if content_type is None:
+                content_type = 'application/xml; charset=UTF-8'
+            headers['Content-Type'] = content_type
+            headers['Content-Length'] = str(len(body)) if body else '0'
+
+        if accept_header is not None:
+            headers['Accept'] = accept_header
+        
+        if  method == 'GET':
+            # print(url, headers, params)
+            response = requests.get(url, headers=headers, params=params, verify=False)
+            content = response.json()
+
+        else:
+            print("NOT IMPLEMENTED YET")
+
+        if response.status_code != 200 and response.status_code != 201 and (ignore_status != response.status_code):
             raise youtrack.YouTrackException(url, response, content)
 
         return response, content
@@ -313,6 +341,22 @@ class Connection(object):
         """ http://confluence.jetbrains.net/display/YTD2/GET+user
         """
         return youtrack.User(self._get("/admin/user/" + urlquote(login.encode('utf8'))), self)
+
+    def search_user(self, params=None):
+        """
+        MATTEO
+        https://www.jetbrains.com/help/hub/2018.2/HUB-REST-API_Users_Get-All-Users.html
+        """
+        # req = {'query':'email:' + email}
+        params = {'query' : params}
+        url = self.hub_url + '/users?'
+
+        # if params is None:
+            # params = {}
+
+        response, content = self._reqs('GET', url, params)
+
+        return response
 
     def create_user(self, user):
         """ user from getUser
