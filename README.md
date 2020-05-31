@@ -1,7 +1,9 @@
 This project
 ============
 This is a fork of [devopshq/youtrack](https://github.com/devopshq/youtrack), a copy of [JetBrains/youtrack-rest-python-library](https://github.com/JetBrains/youtrack-rest-python-library) built to interact with youtrack's API.
-I've started using the official JetBrain's module but, even if it states it has been updated to use python3, it crashes while posting a new comment on YT. I've started using devopshq's one, but I've hit it's limits, since it still relies on the old YT API, for example it cannot search for a user.
+
+I've started using the official JetBrain's module but, even if it states it has been updated to use python3, it crashes while posting a new comment on YT. I've started using devopshq's one as it claims to be updated to python3. It is, but I've hit it's limits, since it still relies on the old YT API, for example it cannot search for a user.
+
 So, I've implemented this search, and since I need more flexibily, I will maintain my changes in this repo.
 Please note that, since this is slowly moving from the old to the new API, only the `api_key` login works.
 
