@@ -5,7 +5,7 @@ from datetime import datetime
 import httplib2
 from xml.dom import minidom
 import sys
-import youtrack
+import ytconnector.youtrack as youtrack
 from xml.dom import Node
 import requests
 import urllib
@@ -344,8 +344,12 @@ class Connection(object):
 
     def search_user(self, params=None):
         """
-        MATTEO
         https://www.jetbrains.com/help/hub/2018.2/HUB-REST-API_Users_Get-All-Users.html
+        es: user = conn.search_user( 'email:user@domain.com' )
+        return: A dictionary with all user details
+        return example: 
+        >>> user['name']
+        Tom Hanks
         """
         # req = {'query':'email:' + email}
         params = {'query' : params}
@@ -356,7 +360,7 @@ class Connection(object):
 
         response, content = self._reqs('GET', url, params)
 
-        return response
+        return response['users'][0]
 
     def create_user(self, user):
         """ user from getUser
