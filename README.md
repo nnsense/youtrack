@@ -7,6 +7,17 @@ I've started using the official JetBrain's module but, even if it states it has 
 So, I've implemented this search, and since I need more flexibily, I will maintain my changes in this repo.
 Please note that, since this is slowly moving from the old to the new API, only the `api_key` login works.
 
+The project will eventually develop into a separate module "ytconnector".
+
+TO DO:
+- Update setup to install with pip as ytconnector
+- Check all youtrack dependencies still present (likely need to check `youtrack/youtrack`
+- Restore username / password login
+- Update core modules to use requests
+- Review the whole module to be consistent, remove any dependency to youtrack left, remove any unneeded module
+- Add more methods
+- Update to v 2020
+
 Readme from DevopsHQ repo:
 
 YouTrack Python 3 Client Library
