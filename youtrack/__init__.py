@@ -1,4 +1,4 @@
-from youtrack.config import __version__
+from ytconnector.config import __version__
 
 version = str(__version__).split('.')
 if len(version) < 4:
@@ -9,4 +9,4 @@ else:
     else:
         version = '{} build {}'.format('.'.join(version[:3]), version[3])
 
-from youtrack.youtrack import *  # noqa
+from ytconnector.youtrack import *  # noqa
